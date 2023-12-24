@@ -35,8 +35,14 @@ public class JWTImplemented implements JWTService {
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
-        return userName.equals(userDetails.getUsername());
+        return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
+
+    private boolean isTokenExpired(String token) {
+        return extractClaim(token, Claims::getExpiration).before(new Date());
+
+    }
+
     @Override
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder().setSubject(

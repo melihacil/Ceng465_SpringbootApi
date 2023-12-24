@@ -47,17 +47,14 @@ public class JwtAuthFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(jwt, userDetails)) {
                 //set the authentication
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
+                UsernamePasswordAuthenticationToken newToken = new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
                                 userDetails.getAuthorities());
                 //set the details of the user
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                newToken.setDetails( new WebAuthenticationDetailsSource().buildDetails(request));
                 //set the authentication in the context
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(newToken);
             }
         }
         //call the next filter in the chain
