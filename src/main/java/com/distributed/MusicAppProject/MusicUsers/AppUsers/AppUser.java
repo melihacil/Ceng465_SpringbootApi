@@ -27,16 +27,13 @@ public class AppUser implements UserDetails {
     private String username;
     private String password;
 
-    private String email;
-
-    private Role userRole;
-
     @Enumerated(EnumType.STRING)
-    //private Role role;
+    private Role role;
+
 
     @Override // this method is used to get the role of the user
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return List.of(new SimpleGrantedAuthority(userRole.name()));
+       return List.of(new SimpleGrantedAuthority(role.name()));
        //return null;
     }
 

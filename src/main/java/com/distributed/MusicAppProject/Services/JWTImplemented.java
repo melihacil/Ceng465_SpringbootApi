@@ -45,8 +45,9 @@ public class JWTImplemented implements JWTService {
 
     @Override
     public String generateToken(UserDetails userDetails) {
-        return Jwts.builder().setSubject(
-                userDetails.getUsername())
+        return Jwts
+                .builder()
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

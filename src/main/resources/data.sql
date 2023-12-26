@@ -1,1 +1,1 @@
-insert into employee(employeeId, employeeName , employeeAddress,employeeEmail) values('1','Jack','USA','jack@gmail.com');
+insert into users(username, password, role) values('embed','sifre', 'USER');

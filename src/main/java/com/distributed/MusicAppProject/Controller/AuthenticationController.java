@@ -1,12 +1,12 @@
 package com.distributed.MusicAppProject.Controller;
 
 //import com.distributed.MusicAppProject.DataObject.AuthenticationResponse;
+
 import com.distributed.MusicAppProject.DataObject.Login_Request;
 import com.distributed.MusicAppProject.DataObject.Register_Request;
 import com.distributed.MusicAppProject.DataObject.Response;
 import com.distributed.MusicAppProject.Services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +22,42 @@ public class AuthenticationController {
 
     // register
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody Register_Request registerRequest) {
-        return ResponseEntity.ok(_service.register(registerRequest));
+    public Response<Object> register(@RequestBody Register_Request registerRequest) {
+        Response response = _service.register(registerRequest);
+        if (response == null) {
+            return Response
+                    .builder()
+                    .status(false)
+                    ._message("User already exists")
+                    ._payload(null)
+                    .build();
+        }
+        return Response
+                .builder()
+                .status(true)
+                ._message("User created")
+                ._payload(response)
+                .build();
     }
 
     // login
     @PostMapping("/login")
-    public ResponseEntity<Response> login(@RequestBody Login_Request loginRequest) {
-        return ResponseEntity.ok(_service.login(loginRequest));
+    public Response<Object> login(@RequestBody Login_Request loginRequest) {
+        String response = _service.login(loginRequest);
+        if (response == null) {
+            return Response
+                    .builder()
+                    .status(false)
+                    ._message("User not found")
+                    ._payload(null)
+                    .build();
+        }
+        return Response
+                .builder()
+                .status(true)
+                ._message("User logged in")
+                ._payload(response)
+                .build();
     }
+
 }

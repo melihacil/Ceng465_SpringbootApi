@@ -13,12 +13,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthFilter {
+public class JwtAuthFilter  extends OncePerRequestFilter {
 
 
     private final JWTService jwtService;
@@ -26,7 +27,7 @@ public class JwtAuthFilter {
     //loads the user from the database.
     private final UserDetailsService userDetailsService;
 
-    //@Override
+    @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request,
                                     @Nonnull HttpServletResponse response,
                                     @Nonnull FilterChain filterChain) throws ServletException, IOException {

@@ -4,8 +4,12 @@ import com.distributed.MusicAppProject.DataObject.Login_Request;
 import com.distributed.MusicAppProject.DataObject.Register_Request;
 import com.distributed.MusicAppProject.DataObject.Response;
 import com.distributed.MusicAppProject.MusicUsers.AppUsers.AppUser;
+import com.distributed.MusicAppProject.MusicUsers.AppUsers.Role;
 import com.distributed.MusicAppProject.MusicUsers.UserRepo;
+import com.distributed.MusicAppProject.Services.Interfaces.JWTService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,42 +18,54 @@ public class AuthenticationService {
 
     private final UserRepo _userRepo;
 
-    public Response register(Register_Request registerRequest) {
+    private final PasswordEncoder passEncoder;
 
+    private final JWTService jwtService;
+
+    private final AuthenticationManager authManager;
+    public Response register(Register_Request registerRequest) {
+        System.out.println("Register Method Starting");
         if (_userRepo.existsByUsername(registerRequest.getUsername())) {
+            System.out.println("Checking");
             //throw exception in console
             System.out.println("User already exists");
             return null;
         }
         else {
             //create user
+            System.out.println("Creating user");
             var user = AppUser.builder()
                     .username(registerRequest.getUsername())
-                    //.password(passwordEncoder.encode(registerRequest.getPassword()))
-                    //.role(Role.USER)
+                    .password(passEncoder.encode(registerRequest.getPassword()))
+                    .role(Role.USER)
                     .build();
             //save user
+            System.out.println("User created");
             _userRepo.save(user);
+            System.out.println("Getting Jwt");
+            var jwtToken = jwtService.generateToken(user);
             //generate token
             //var jwtToken = jwtService.generateToken(user);
             //return token
+            System.out.println("Returning");
             return Response
                     .builder()
                     .build();
         }
     }
 
-    public Response login(Login_Request loginRequest) {
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                        loginRequest.getUsername(),
+    public String login(Login_Request loginRequest) {
+        System.out.println("Login Request");
+//        authManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                       loginRequest.getUsername(),
 //                        loginRequest.getPassword()
-//                )
-//        );
-//        var user = userRepository.findByUsername(loginRequest.getUsername())
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        return jwtService.generateToken(user);
-        return Response
-                .builder()
-                .build();
+//              )
+//       );
+        System.out.println("Login Request -- Authmanager finished");
+        var user =  _userRepo.findByUsername(loginRequest.getUsername())
+               .orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println("Login Request -- Returning");
+        return jwtService.generateToken(user);
     }
+
 }
