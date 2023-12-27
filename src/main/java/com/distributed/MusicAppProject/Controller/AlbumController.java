@@ -1,11 +1,13 @@
 package com.distributed.MusicAppProject.Controller;
 
-import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Album;
-import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Albums;
+import api.deezer.exceptions.DeezerException;
+import api.deezer.objects.Album;
+import com.distributed.MusicAppProject.DataObject.Response;
 import com.distributed.MusicAppProject.Services.Interfaces.APIService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("app/v1/albums")
@@ -32,65 +34,41 @@ public class AlbumController {
     }
 
 
-    @GetMapping("/albums/details/{albumId}")
-    public String getSelectedAlbum(@PathVariable("albumId") Integer albumId, Model model) {
-        if (albumId == null) {
-            return "error-custom";
-        } else {
-
-            Album currentAlbum = new Album();
+    @GetMapping("distApp/albums/{albumName}")
+    public Response GetAlbumByID(@PathVariable("albumName") String albumName) throws IOException {
+        Album album = null;
+        if (albumName == null) {
+            return Response
+                    .builder()
+                    .status(false)
+                    ._message("Album ID Null")
+                    ._payload(null)
+                    .build();
+        }
+        else {
             try {
-                currentAlbum = APIService.getAlbumByAlbumId(albumId);
-            } catch (Exception e) {
-                e.printStackTrace();
+                album = APIService.getAlbumData(albumName);
             }
-
-            model.addAttribute("currentAlbum", currentAlbum);
-            return "album_details";
-        }
-    }
-//
-//    @GetMapping("/reloadAlbums")
-//    public String albumsReturn(@ModelAttribute("albums") Albums albums, @ModelAttribute("currentArtistId") Integer artistId, Model model) {
-//        if (albums == null) {
-//            return "error-custom";
-//        }
-//        final String s = "redirect:/albums/{" + artistId + "}";
-//        return s;
-//    }
-
-    /**
-     * @return all the albums associated with this artist ID
-     */
-    @GetMapping("/albums/{artistId}")
-    public String getAllAlbums(@PathVariable("artistId") Integer artistId, Model model) {
-        if (artistId == null) {
-            return "error-custom";
-        } else {
-            Albums albums = new Albums();
-            try {
-                albums = albumsRequest(artistId);
-            } catch (Exception e) {
-//                log.info("Cause: [ " + e.getCause() + " ]  Message: [" + e.getMessage() + " ]");
-                e.printStackTrace();
-
-                System.out.println("Cause: [ " + e.getCause() + " ]  Message: [" + e.getMessage() + " ]");
+            catch (DeezerException e) {
+                System.out.println("Album not found check album String");
+                return Response
+                        .builder()
+                        .status(false)
+                        ._message("Album not found check album String")
+                        ._payload(null)
+                        .build();
             }
-            model.addAttribute("albums", albums);
-            return "albums";
+            Response response = new Response<>(true, "Tracks found", album);
+            System.out.println("Album FOUND = " + album.getTitle()+ " Artist = " + album.getContributors());
+            return Response
+                    .builder()
+                    .status(true)
+                    ._message("Album found" )
+                    ._payload(response)
+                    .build();
         }
+
     }
 
-    private Albums albumsRequest(Integer id) throws Exception {
-        Albums albums = null;
-        try {
-            albums = APIService.getAlbumsByArtistId(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (albums != null)
-            return albums;
-        else
-            throw new Exception("No Albums Found for this Artist");
-    }
+
 }

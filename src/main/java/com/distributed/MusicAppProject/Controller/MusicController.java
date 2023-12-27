@@ -1,7 +1,12 @@
 package com.distributed.MusicAppProject.Controller;
 
+import api.deezer.exceptions.DeezerException;
+import api.deezer.objects.Track;
+import api.deezer.objects.data.TrackData;
 import com.distributed.MusicAppProject.DataObject.Response;
+import com.distributed.MusicAppProject.Services.Interfaces.APIService;
 import com.distributed.MusicAppProject.Services.MusicService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,37 +17,66 @@ import java.io.IOException;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("app/v1/music")
 public class MusicController {
 
     @Autowired
     private final MusicService _service;
 
-    public MusicController(MusicService _service) {
-        this._service = _service;
-    }
+    private final APIService APIService;
 
     @GetMapping("/{id}")
-    public Response<String> GetMusicByID(@PathVariable int id) throws IOException {
+    public Response GetMusicByID(@PathVariable int id) throws IOException {
         String musicName = "" ;//_service.GetMusicByID(id);
-
-        if (musicName == null)
-            return new Response<>(false, "Music Not Found!", null);
-
-        return new Response<>(true, "Music = " + musicName + " is found!", musicName);
-
-
+        Track track = null;
+        try  {
+            track = APIService.getTrackData(id);
+        }
+        catch (DeezerException e) {
+            System.out.println("Track Not Found Check TRACK ID");
+            return Response
+                    .builder()
+                    .status(false)
+                    ._message("Track Not Found Check ID")
+                    ._payload(null)
+                    .build();
+        }
+        Response response = new Response<>(true, "Album Found", track);
+        System.out.println("Track FOUND = " + track.getTitle()  + " Artist = " + track.getArtist());
+        return Response
+                .builder()
+                .status(true)
+                ._message("Track found = " + track.getTitle() )
+                ._payload(response)
+                .build();
     }
 
-    // get all movies
-//    @GetMapping("/all")
-//    public Response<List<UserMovie>> getAllMovies(@AuthenticationPrincipal User user) throws JSONException {
-//        List<UserMovie> response = movieService.getAllMovies(user.getUsername());
-//        if (response == null) {
-//            return new BaseResponse<>(false, "Movies has not been listed", null);
-//        }
-//        return new BaseResponse<>(true, "success", response);
-//    }
+    @GetMapping("/tracks/{artistName}")
+    public Response GetMusicByArtistName(@PathVariable String artistName) throws IOException {
+        String musicName = "" ;//_service.GetMusicByID(id);
+        TrackData  trackData= null;
+        try  {
+            trackData = APIService.getTracksArtist(artistName);
+        }
+        catch (DeezerException e) {
+            System.out.println("Artist no Found Check Artist String");
+            return Response
+                    .builder()
+                    .status(false)
+                    ._message("Artist no Found Check Artist String")
+                    ._payload(null)
+                    .build();
+        }
+        Response response = new Response<>(true, "Tracks found", trackData.getData());
+        System.out.println("Track FOUND = " + trackData.getData()+ " Artist = " + trackData.getTotal());
+        return Response
+                .builder()
+                .status(true)
+                ._message("Tracks Found of artist" )
+                ._payload(response)
+                .build();
+    }
 
-
+    //TrackData trackData = deezerApi.search().searchTrack("eminem").execute();
 }

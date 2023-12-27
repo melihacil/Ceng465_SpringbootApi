@@ -1,9 +1,10 @@
 package com.distributed.MusicAppProject.Services.Interfaces;
 
-import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Album;
-import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Albums;
+import api.deezer.exceptions.DeezerException;
+import api.deezer.objects.Album;
+import api.deezer.objects.Track;
+import api.deezer.objects.data.TrackData;
 import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Artists;
-import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Track;
 
 import java.util.List;
 
@@ -26,20 +27,8 @@ public interface APIService {
      */
     Artists searchArtist(String artistName) throws Exception;
 
-    /**
-     * Gets album by album id.
-     *
-     * @param albumId the album id
-     * @return the album by album id
-     * @throws Exception the exception
-     */
-    Album getAlbumByAlbumId(Integer albumId) throws Exception;
-    /**
-     * Gets albums by artist id.
-     *
-     * @param artistId the artist id
-     * @return the artists albums
-     * @throws Exception the exception
-     */
-    Albums getAlbumsByArtistId(Integer artistId) throws Exception;
+
+    Track getTrackData(Integer trackID) throws DeezerException;
+    TrackData getTracksArtist (String artistName) throws DeezerException;
+    Album getAlbumData (String albumName) throws DeezerException;
 }
