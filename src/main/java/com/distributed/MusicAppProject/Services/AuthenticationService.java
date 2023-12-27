@@ -3,6 +3,7 @@ package com.distributed.MusicAppProject.Services;
 import com.distributed.MusicAppProject.DataObject.Login_Request;
 import com.distributed.MusicAppProject.DataObject.Register_Request;
 import com.distributed.MusicAppProject.DataObject.Response;
+import com.distributed.MusicAppProject.DataObject.Update_Request;
 import com.distributed.MusicAppProject.MusicUsers.AppUsers.AppUser;
 import com.distributed.MusicAppProject.MusicUsers.AppUsers.Role;
 import com.distributed.MusicAppProject.MusicUsers.UserRepo;
@@ -68,6 +69,33 @@ public class AuthenticationService {
                .orElseThrow(() -> new RuntimeException("User not found"));
         System.out.println("Login Request -- Returning");
         return jwtService.generateToken(user);
+    }
+
+    public Response update(Update_Request updateRequest) {
+        System.out.println("Update Method Starting");
+        if (_userRepo.existsByUsername(updateRequest.getUsername())) {
+            AppUser user = _userRepo.findByUsername(updateRequest.getUsername()).get();
+
+            user.setUsername(updateRequest.get_newUserName());
+            //save user
+            System.out.println("User created");
+            _userRepo.save(user);
+            System.out.println("Getting Jwt");
+            var jwtToken = jwtService.generateToken(user);
+            //generate token
+            //var jwtToken = jwtService.generateToken(user);
+            //return token
+            System.out.println("Returning");
+            return Response
+                    .builder()
+                    .build();
+
+        }
+        else {
+            System.out.println("User Does not exist");
+            return null;
+
+        }
     }
 
 }

@@ -5,12 +5,10 @@ package com.distributed.MusicAppProject.Controller;
 import com.distributed.MusicAppProject.DataObject.Login_Request;
 import com.distributed.MusicAppProject.DataObject.Register_Request;
 import com.distributed.MusicAppProject.DataObject.Response;
+import com.distributed.MusicAppProject.DataObject.Update_Request;
 import com.distributed.MusicAppProject.Services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("app/v1/auth")
@@ -44,6 +42,26 @@ public class AuthenticationController {
     @PostMapping("/login")
     public Response<Object> login(@RequestBody Login_Request loginRequest) {
         String response = _service.login(loginRequest);
+        if (response == null) {
+            return Response
+                    .builder()
+                    .status(false)
+                    ._message("User not found")
+                    ._payload(null)
+                    .build();
+        }
+        return Response
+                .builder()
+                .status(true)
+                ._message("User logged in")
+                ._payload(response)
+                .build();
+    }
+
+
+    @PutMapping("/update")
+    public Response<Object> update(@RequestBody Update_Request updateRequest) {
+        Response response = _service.update(updateRequest);
         if (response == null) {
             return Response
                     .builder()
