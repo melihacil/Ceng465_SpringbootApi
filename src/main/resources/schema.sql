@@ -6,6 +6,16 @@ CREATE TABLE IF NOT EXISTS users(
     role VARCHAR(255) NOT NULL
 );
 
+
+CREATE TABLE IF NOT EXISTS users_favoriteTrack(
+    id INTEGER PRIMARY KEY,
+    trackId INTEGER NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    trackname VARCHAR(255) NOT NULL,
+    artistname VARCHAR(255) NOT NULL,
+    FOREIGN KEY (username) REFERENCES public.users (username)
+);
+
 --CREATE TABLE IF NOT EXISTS user_movie(
 --    id INTEGER PRIMARY KEY,
 --    movieId INTEGER NOT NULL,

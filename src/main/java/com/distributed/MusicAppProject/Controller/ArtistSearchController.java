@@ -59,13 +59,6 @@ public class ArtistSearchController {
         return "index";
     }
 
-    /**
-     * Artist search string.
-     *
-     * @param search the search
-     * @param model  the model
-     * @return the string
-     */
     @PostMapping(path = "/searchForm")
     public String artistSearch(@ModelAttribute("search") DeezerSearch search, Model model) {
 
