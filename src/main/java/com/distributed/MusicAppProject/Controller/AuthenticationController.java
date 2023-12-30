@@ -2,10 +2,10 @@ package com.distributed.MusicAppProject.Controller;
 
 //import com.distributed.MusicAppProject.DataObject.AuthenticationResponse;
 
-import com.distributed.MusicAppProject.DataObject.Login_Request;
-import com.distributed.MusicAppProject.DataObject.Register_Request;
+import com.distributed.MusicAppProject.DataObject.Requests.Login_Request;
+import com.distributed.MusicAppProject.DataObject.Requests.Register_Request;
 import com.distributed.MusicAppProject.DataObject.Response;
-import com.distributed.MusicAppProject.DataObject.Update_Request;
+import com.distributed.MusicAppProject.DataObject.Requests.Update_Request;
 import com.distributed.MusicAppProject.Services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +59,7 @@ public class AuthenticationController {
     }
 
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public Response<Object> update(@RequestBody Update_Request updateRequest) {
         Response response = _service.update(updateRequest);
         if (response == null) {

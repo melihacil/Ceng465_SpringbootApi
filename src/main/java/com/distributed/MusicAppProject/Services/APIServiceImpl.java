@@ -4,16 +4,13 @@ import api.deezer.DeezerApi;
 import api.deezer.exceptions.DeezerException;
 import api.deezer.objects.*;
 import api.deezer.objects.data.TrackData;
-import com.distributed.MusicAppProject.MusicUsers.MusicObjects.Artists;
 import com.distributed.MusicAppProject.Services.Interfaces.APIService;
 import com.distributed.MusicAppProject.Utils.HTTPConnection;
 import com.distributed.MusicAppProject.Utils.SIMHRestTemplate;
-import com.distributed.MusicAppProject.Utils.UrlConfigs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Scanner;
 
 @Service
@@ -82,21 +79,20 @@ public class APIServiceImpl implements APIService {
         return data;
     }
 
+
+    public void TestStuff() {
+        //deezerApi.search().searchTrack("").execute().getData().get(0).getPreview();
+    }
+
     @Override
     public TrackData getTracksArtist (String artistName) throws DeezerException{
         TrackData data = deezerApi.search().searchTrack(artistName).execute();
         return data;
     }
-    @Override
-    public List<Track> getTopFiveTracks(int artistId) { //TODO: request top 5 tracks
-        return null;
-    }
 
-    @Override
-    public Artists searchArtist(String userInput) throws Exception {
-        String urlQuery = UrlConfigs.buildArtistSearchQuery(userInput);
 
-        return restTemplate.get(urlQuery, Artists.class);
+    public String PlayListSearchTrack(String trackName) throws DeezerException{
+        return deezerApi.search().searchTrack(trackName).execute().getData().get(0).getTitle();
     }
 
 

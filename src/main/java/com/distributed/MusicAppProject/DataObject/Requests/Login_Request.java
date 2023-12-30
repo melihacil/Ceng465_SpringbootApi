@@ -1,4 +1,4 @@
-package com.distributed.MusicAppProject.DataObject;
+package com.distributed.MusicAppProject.DataObject.Requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Update_Request {
-
+public class Login_Request {
     private String username;
-    private String _newUserName;
+    private String password;
 }

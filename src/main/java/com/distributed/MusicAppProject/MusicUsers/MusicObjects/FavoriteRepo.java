@@ -16,5 +16,5 @@ public interface FavoriteRepo  extends JpaRepository<FavoriteTrack, String> {
     boolean existsByTrackId(int trackId);
 
     @Transactional
-    void deleteByMovieIdAndUsername(int trackId, String username);
+    void deleteByTrackIdAndUsername(int trackId, String username);
 }

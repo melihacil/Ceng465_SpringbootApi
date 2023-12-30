@@ -12,32 +12,22 @@ CREATE TABLE IF NOT EXISTS users_favoriteTrack(
     trackId INTEGER NOT NULL,
     username VARCHAR(255) NOT NULL,
     trackname VARCHAR(255) NOT NULL,
-    artistname VARCHAR(255) NOT NULL,
     FOREIGN KEY (username) REFERENCES public.users (username)
 );
 
---CREATE TABLE IF NOT EXISTS user_movie(
---    id INTEGER PRIMARY KEY,
---    movieId INTEGER NOT NULL,
---    username VARCHAR(255) NOT NULL,
---    movie_name VARCHAR(255) NOT NULL,
---    FOREIGN KEY (movieId) REFERENCES public.movies (id),
---    FOREIGN KEY (username) REFERENCES public.users (username),
---    PRIMARY KEY (username, movie_name)
---);
+CREATE TABLE IF NOT EXISTS users_trackReview(
+    id INTEGER PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    trackname VARCHAR(255) NOT NULL,
+    trackReview VARCHAR(MAX) NOT NULL,
+    FOREIGN KEY (username) REFERENCES public.users (username),
+    FOREIGN KEY (trackname) REFERENCES public.users_favoriteTrack (trackname)
+);
 
---CREATE TABLE IF NOT EXISTS user_favorite(
---    id INTEGER PRIMARY KEY,
---    movieId INTEGER NOT NULL,
---    username VARCHAR(255) NOT NULL,
---    movie_name VARCHAR(255) NOT NULL,
---    FOREIGN KEY (movieId) REFERENCES public.movies (id),
---    FOREIGN KEY (username) REFERENCES public.users (username),
---    PRIMARY KEY (username, movieId)
---);
+CREATE TABLE IF NOT EXISTS users_playlist(
+    id INTEGER PRIMARY KEY,
+    playlistName VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    playlistTracks VARCHAR(MAX) NOT NULL
+);
 
---CREATE TABLE IF NOT EXISTS movies(
---    id INTEGER PRIMARY KEY,
---    movieName VARCHAR(255) NOT NULL,
---    rating DOUBLE NOT NULL,
---);

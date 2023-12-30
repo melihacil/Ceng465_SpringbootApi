@@ -1,4 +1,4 @@
-package com.distributed.MusicAppProject.DataObject;
+package com.distributed.MusicAppProject.DataObject.Requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Register_Request {
+public class Update_Request {
+
     private String username;
-    private String password;
+    private String newUserName;
 }

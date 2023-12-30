@@ -1,7 +1,5 @@
 package com.distributed.MusicAppProject.MusicUsers.MusicObjects;
 
-
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="user_favoriteTrack")
-public class FavoriteTrack {
+@Table(name="user_trackReview")
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int trackId;
     private String username;
     private String trackName;
+    private String trackReview;
 }

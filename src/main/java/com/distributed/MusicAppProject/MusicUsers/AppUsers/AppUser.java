@@ -1,5 +1,6 @@
 package com.distributed.MusicAppProject.MusicUsers.AppUsers;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Hidden
 @Table(name="users")
 public class AppUser implements UserDetails {
 
@@ -24,6 +26,7 @@ public class AppUser implements UserDetails {
     @GeneratedValue
     private int id;
 
+    @Column(name = "username", updatable = true)
     private String username;
     private String password;
 

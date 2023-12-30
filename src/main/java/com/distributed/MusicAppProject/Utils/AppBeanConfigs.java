@@ -1,4 +1,4 @@
-package com.distributed.MusicAppProject.Services;
+package com.distributed.MusicAppProject.Utils;
 
 import com.distributed.MusicAppProject.MusicUsers.UserRepo;
 import lombok.RequiredArgsConstructor;

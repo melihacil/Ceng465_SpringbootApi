@@ -1,4 +1,5 @@
-package com.distributed.MusicAppProject.DataObject;
+package com.distributed.MusicAppProject.DataObject.Requests;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Search_Request {
+public class Playlist_Request {
 
-    private String searchQuery;
+    String username;
+    String playlistName;
+    String trackName;
+
+
 }

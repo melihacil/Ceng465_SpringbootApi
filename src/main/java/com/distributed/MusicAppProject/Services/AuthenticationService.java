@@ -1,9 +1,9 @@
 package com.distributed.MusicAppProject.Services;
 
-import com.distributed.MusicAppProject.DataObject.Login_Request;
-import com.distributed.MusicAppProject.DataObject.Register_Request;
+import com.distributed.MusicAppProject.DataObject.Requests.Login_Request;
+import com.distributed.MusicAppProject.DataObject.Requests.Register_Request;
 import com.distributed.MusicAppProject.DataObject.Response;
-import com.distributed.MusicAppProject.DataObject.Update_Request;
+import com.distributed.MusicAppProject.DataObject.Requests.Update_Request;
 import com.distributed.MusicAppProject.MusicUsers.AppUsers.AppUser;
 import com.distributed.MusicAppProject.MusicUsers.AppUsers.Role;
 import com.distributed.MusicAppProject.MusicUsers.UserRepo;
@@ -75,10 +75,11 @@ public class AuthenticationService {
         System.out.println("Update Method Starting");
         if (_userRepo.existsByUsername(updateRequest.getUsername())) {
             AppUser user = _userRepo.findByUsername(updateRequest.getUsername()).get();
-
-            user.setUsername(updateRequest.get_newUserName());
+            System.out.println("Username   = " + user.getUsername() + " www" + updateRequest.getNewUserName());
+            user.setUsername(updateRequest.getNewUserName());
+            System.out.println("Username   = " + user.getUsername());
             //save user
-            System.out.println("User created");
+            System.out.println("User updated");
             _userRepo.save(user);
             System.out.println("Getting Jwt");
             var jwtToken = jwtService.generateToken(user);
