@@ -14,7 +14,9 @@ java {
 repositories {
 	mavenCentral()
 }
-
+bootRun {
+	standardInput = System.in
+}
 dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
