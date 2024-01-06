@@ -2,12 +2,9 @@ package com.distributed.MusicAppProject.Services;
 
 import api.deezer.DeezerApi;
 import api.deezer.exceptions.DeezerException;
-import api.deezer.objects.Album;
-import api.deezer.objects.DeezerAccessToken;
-import api.deezer.objects.Track;
-import api.deezer.objects.User;
+import api.deezer.objects.*;
 import api.deezer.objects.data.TrackData;
-import com.distributed.MusicAppProject.MusicAppProjectApplication;
+import com.distributed.MusicAppProject.DataObject.Requests.ApiAuth_Request;
 import com.distributed.MusicAppProject.Services.Interfaces.APIService;
 import com.distributed.MusicAppProject.Utils.HTTPConnection;
 import com.distributed.MusicAppProject.Utils.SIMHRestTemplate;
@@ -20,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class APIServiceImpl implements APIService {
 
 
-    static DeezerApi deezerApi; //= new DeezerApi();
+    DeezerApi deezerApi; //= new DeezerApi();
     /**
      * Instantiates a new API service.
      *
@@ -43,27 +40,11 @@ public class APIServiceImpl implements APIService {
     @Autowired
     public APIServiceImpl(HTTPConnection httpConnectionUtils){
         this.restTemplate = new SIMHRestTemplate(httpConnectionUtils);
-        this.deezerApi = new DeezerApi();
-        try {
-            //Scanner scanner = new Scanner(System.in);
-            //String loginUrl = deezerApi.auth().getLoginUrl(APP_ID, REDIRECT_URI, Permission.BASIC_ACCESS);
-            //System.out.println(loginUrl); // https://connect.deezer.com/oauth/auth.php?app_id=123&redirect_uri=your.domain.com&perms=basic_access
-            //System.out.println("https://connect.deezer.com/oauth/auth.php?app_id=657351&redirect_uri=https://localhost/callback&perms=basic_access");
-            //System.out.print("Please enter code from deezer: ");
-
-            // Step 3. Get access_token.
-
-
-        }
-        catch (Exception e) {
-            System.out.println("DEEZER ERROR ERROR!");
-            e.printStackTrace();
-        }
     }
 
-    public static void DeezerApiInit(String deezerCode) {
-
-        deezerApi = new DeezerApi();
+    public boolean DeezerApiInit(String deezerCode) {
+        if (deezerApi == null)
+            deezerApi = new DeezerApi();
         try {
             //Scanner scanner = new Scanner(System.in);
             //String loginUrl = deezerApi.auth().getLoginUrl(APP_ID, REDIRECT_URI, Permission.BASIC_ACCESS);
@@ -72,19 +53,31 @@ public class APIServiceImpl implements APIService {
             //System.out.print("Please enter code from deezer: ");
 
             // Step 3. Get access_token.
-            DeezerAccessToken accessToken = deezerApi.auth().getAccessToken(APP_ID, SECRET, MusicAppProjectApplication.deezerCode).execute();
+            DeezerAccessToken accessToken = deezerApi.auth().getAccessToken(APP_ID, SECRET, deezerCode).execute();
             deezerApi.setAccessToken(accessToken);
-
+            distProject = deezerApi.user().getMe().execute();
+            System.out.println(distProject);
         }
         catch (Exception e) {
             System.out.println("DEEZER ERROR ERROR!");
             e.printStackTrace();
+            return false;
+
         }
+
+        return true;
         // Now we are ready to execute any request we want.
-        //        distProject = deezerApi.user().getMe().execute();
-        //        System.out.println(distProject);
+
     }
 
+    @Override public String getCodeLink() throws DeezerException {
+        if (deezerApi == null)
+            deezerApi = new DeezerApi();
+        String loginUrl = deezerApi.auth().getLoginUrl(APP_ID, REDIRECT_URI, Permission.BASIC_ACCESS);
+        System.out.println(loginUrl); // https://connect.deezer.com/oauth/auth.php?app_id=123&redirect_uri=your.domain.com&perms=basic_access
+        System.out.println("https://connect.deezer.com/oauth/auth.php?app_id=657351&redirect_uri=https://localhost/callback&perms=basic_access");
+        return "https://connect.deezer.com/oauth/auth.php?app_id=657351&redirect_uri=https://localhost/callback&perms=basic_access";
+    }
     @Override
     public Album getAlbumData (String albumName) throws DeezerException{
        // Album albumData = deezerApi.search().searchAlbum(albumName).execute();
@@ -97,6 +90,23 @@ public class APIServiceImpl implements APIService {
     public Track getTrackData (Integer trackID) throws DeezerException{
         Track data = deezerApi.track().getById(trackID).execute();
         return data;
+    }
+
+
+    @Override
+    public String authenticate(ApiAuth_Request apiAuthRequest) {
+
+
+        System.out.println("https://connect.deezer.com/oauth/auth.php?app_id=657351&redirect_uri=https://localhost/callback&perms=basic_access");
+        System.out.print("Please enter code from deezer: ");
+
+
+         if (DeezerApiInit(apiAuthRequest.getApiCode())) {
+             return "Deezer Accepted API CODE!";
+         }
+
+            return "Deezer Rejected API CODE!";
+
     }
 
 
