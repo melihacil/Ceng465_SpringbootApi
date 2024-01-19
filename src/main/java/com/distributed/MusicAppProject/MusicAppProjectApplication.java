@@ -13,17 +13,10 @@ public class MusicAppProjectApplication {
 		SpringApplication.run(MusicAppProjectApplication.class, args);
 	}
 
-//	@Bean
-//	public CommandLineRunner demo(MovieService movieService) {
-//		return args -> {
-//			//if database has no movies, save movies to database
-//			if (movieRepository.count() == 0) {
-//				movieService.saveMovieToDB();
-//			}
-//			else {
-//				System.out.println("Database has movies");
-//			}
-//		};
-//	}
+
+	// Things that can be added
+	// CLEAN UP RESPONSES
+	// AUTHENTICATE ONLY USING ONE LINK
+	// CLEAN UP CODE SOME BIT
 
 }

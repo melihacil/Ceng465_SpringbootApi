@@ -24,7 +24,7 @@ public class ReviewController {
         return new Response<>(true, "Review for the Fav Track Saved", response);
     }
     // Delete track from fav list
-    @DeleteMapping("/deleteFavorite")
+    @DeleteMapping("/deleteReview")
     public Response<String> deleteFavorite(@RequestBody Review_Request review_request){
         String response = reviewService.deleteReview(review_request.getUsername(),review_request.getTrackName());
         if (response == null) {
