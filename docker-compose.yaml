@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:15.5
     ports:
-      - 5452:5452
+      - 5452:5432
     volumes:
       - ~/apps/postgres:/var/lib/postgresql/data
     environment:
